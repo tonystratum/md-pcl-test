@@ -1,10 +1,13 @@
 #include <array>
+#include <chrono>
 #include <iostream>
 #include <fstream>
-#include <vector>
+#include <string>
+#include <thread>
 
-#include <pcl/point_cloud.h>
 #include "pcl/impl/point_types.hpp"
+#include "pcl/point_cloud.h"
+#include "pcl/visualization/pcl_visualizer.h"
 
 #define FLOAT_SIZE 4
 
@@ -44,12 +47,21 @@ pcl::PointCloud<pcl::PointXYZ> load_from_bin(const char *path) {
 }
 
 int main() {
-    const pcl::PointCloud<pcl::PointXYZ> points = load_from_bin(
+    const auto points = load_from_bin(
             "/home/stratum/CLionProjects/md_task_pcl/car.bin");
-    for (const auto &p: points) {
-        std::cout << p.x << ' '
-                  << p.y << ' '
-                  << p.z << '\n';
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr basic_cloud_ptr(new pcl::PointCloud<pcl::PointXYZ>);
+    *basic_cloud_ptr = points;
+
+    pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
+    viewer->setBackgroundColor(0, 0, 0);
+    viewer->addPointCloud(basic_cloud_ptr, "cloud");
+    viewer->addCoordinateSystem(1.0);
+    viewer->initCameraParameters();
+
+    while (!viewer->wasStopped()) {
+        viewer->spin();
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     return 0;
 }
