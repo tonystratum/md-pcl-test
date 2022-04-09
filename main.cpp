@@ -11,12 +11,12 @@ struct Point {
     float z;
 };
 
-int main() {
+std::vector<Point> load_from_bin(const char* path) {
+    std::vector<Point> points;
     std::ifstream pcl_stream;
-    pcl_stream.open("/home/stratum/CLionProjects/md_task_pcl/car.bin",
+    pcl_stream.open(path,
                     std::ifstream::in | std::ifstream::binary | std::ifstream::ate);
 
-    std::vector<Point> points;
     if (pcl_stream.is_open()) {
         const size_t flength = pcl_stream.tellg();
         pcl_stream.seekg(pcl_stream.beg);
@@ -47,7 +47,11 @@ int main() {
         delete[] buf;
     }
     pcl_stream.close();
+    return points;
+}
 
+int main() {
+    const std::vector<Point> points = load_from_bin("/home/stratum/CLionProjects/md_task_pcl/car.bin");
     std::cout << points.empty() << '\n';
     for (const Point& p : points) {
         std::cout << p.x << ' '
