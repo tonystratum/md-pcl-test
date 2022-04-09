@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.22)
+project(md_task_pcl)
+
+set(CMAKE_CXX_STANDARD 20)
+find_package(PCL 1.12.1 REQUIRED)
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+add_executable(md_task_pcl main.cpp)
+target_link_libraries(md_task_pcl ${PCL_LIBRARIES})
