@@ -18,7 +18,7 @@ pcl::PointCloud<pcl::PointXYZ> load_from_bin(const char *path) {
     pcl::PointCloud<pcl::PointXYZ> cloud;
     std::ifstream pcl_file;
     pcl_file.open(path,
-                    std::ifstream::in | std::ifstream::binary | std::ifstream::ate);
+                  std::ifstream::in | std::ifstream::binary | std::ifstream::ate);
 
     if (pcl_file.is_open()) {
         const size_t flength = pcl_file.tellg();
@@ -69,6 +69,19 @@ int main() {
     viewer->addCoordinateSystem(1.0);
     viewer->initCameraParameters();
 
+    viewer->setCameraPosition(-9.78234, 7.60488, -10.6904,
+                              0.196818, 0.825628, 0.528774);
+    viewer->saveScreenshot("shot0.png");
+    viewer->saveCameraParameters("params0.cam");
+
+    viewer->setCameraPosition(11.3565, 8.89901, -4.44823,
+                              -0.567369, 0.781851, 0.25846);
+    viewer->saveScreenshot("shot1.png");
+    viewer->saveCameraParameters("params1.cam");
+
+    return 0;
+
+    // see it yourself
     while (!viewer->wasStopped()) {
         viewer->spin();
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
